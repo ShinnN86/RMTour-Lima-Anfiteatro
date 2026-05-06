@@ -3,61 +3,36 @@
 <head>
   <meta charset="utf-8">
   <title>Modelo 3D A-Frame</title>
- <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-  <!-- joystick móvil -->
-
-<script src="https://cdn.jsdelivr.net/npm/aframe-joystick-controls/dist/aframe-joystick-controls.min.js"></script>
-
-<script>
-
-// subir y bajar
-AFRAME.registerComponent('fly-controls', {
-  tick: function () {
-    const pos = this.el.getAttribute('position');
-    const speed = 0.08;
-
-    if (keys['e']) pos.y += speed;
-    if (keys['q']) pos.y -= speed;
-
-    this.el.setAttribute('position', pos);
-  }
-});
-
-let keys = {};
-window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
-window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
-
-</script>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 </head>
 
 <body>
-<a-scene shadow="type:pcfsoft" fog="type: exponential; density:0.02; color:#cce0ff">
+<a-scene shadow="type: pcfsoft">
 
-<a-assets>
+  <!-- Fondo con imagen -->
+  <a-sky src="image.png"></a-sky>
 
-<a-asset-item id="templo" src="AnfiteatroCaral.glb"></a-asset-item>
- </a-assets>
+  <!-- Luces -->
+  <a-light type="ambient" intensity="0.5"></a-light>
+
+  <a-light 
+    type="directional"
+    position="2 5 3"
+    intensity="1"
+    castShadow="true">
+  </a-light>
+
   <!-- Cámara -->
-
+<a-camera position="0 1.6 6" wasd-controls-enabled="false"></a-camera>
 
   <!-- Modelo -->
   <a-entity 
-    gltf-model="#templo"
+    gltf-model="Caral.glb"
     position="0 0.8 0"
     scale="0.8 0.8 0.8"
-    shadow="cast: true  receive:true"
-    animation="property: rota}tion; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+    shadow="cast: true"
+    animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
   </a-entity>
-
-  <a-entity
-camera
-look-controls
-wasd-controls="acceleration:80"
-fly-controls
-joystick-controls
-position="0 1.6 5"> </a-entity>
-
-
 
 </a-scene>
 </body>
