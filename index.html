@@ -7,19 +7,22 @@
 </head>
 
 <body>
-<a-scene shadow="type: pcfsoft">
+<a-scene shadow="type:pcfsoft" fog="type: exponential; density:0.02; color:#cce0ff">
 
- 
+<a-assets>
+
+<a-asset-item id="templo" src="AnfiteatroCaral.glb"></a-asset-item>
+ </a-assets>
   <!-- Cámara -->
 <a-camera position="0 1.6 6" wasd-controls-enabled="false"></a-camera>
 
   <!-- Modelo -->
   <a-entity 
-    gltf-model="AnfiteatroCaral.glb"
+    gltf-model="#templo"
     position="0 0.8 0"
     scale="0.8 0.8 0.8"
-    shadow="cast: true"
-    animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
+    shadow="cast: true  receive:true"
+    animation="property: rota}tion; to: 0 360 0; loop: true; dur: 20000; easing: linear">
   </a-entity>
 
 </a-scene>
