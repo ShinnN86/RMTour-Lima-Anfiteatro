@@ -38,7 +38,7 @@ window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
 <a-asset-item id="templo" src="AnfiteatroCaral.glb"></a-asset-item>
  </a-assets>
   <!-- Cámara -->
-<a-camera position="0 1.6 6" wasd-controls-enabled="false"></a-camera>
+
 
   <!-- Modelo -->
   <a-entity 
@@ -48,6 +48,16 @@ window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
     shadow="cast: true  receive:true"
     animation="property: rota}tion; to: 0 360 0; loop: true; dur: 20000; easing: linear">
   </a-entity>
+
+  <a-entity
+camera
+look-controls
+wasd-controls="acceleration:80"
+fly-controls
+joystick-controls
+position="0 1.6 5"> </a-entity>
+
+
 
 </a-scene>
 </body>
