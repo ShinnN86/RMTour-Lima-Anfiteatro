@@ -1,38 +1,135 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-  <meta charset="utf-8">
-  <title>Modelo 3D A-Frame</title>
-  <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+<meta charset="utf-8">
+<title>Templo 3D avanzado</title>
+
+<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+
+<!-- joystick móvil -->
+
+<script src="https://cdn.jsdelivr.net/npm/aframe-joystick-controls/dist/aframe-joystick-controls.min.js"></script>
+
+<script>
+
+// subir y bajar
+AFRAME.registerComponent('fly-controls', {
+  tick: function () {
+    const pos = this.el.getAttribute('position');
+    const speed = 0.08;
+
+    if (keys['e']) pos.y += speed;
+    if (keys['q']) pos.y -= speed;
+
+    this.el.setAttribute('position', pos);
+  }
+});
+
+let keys = {};
+window.addEventListener('keydown', e => keys[e.key.toLowerCase()] = true);
+window.addEventListener('keyup', e => keys[e.key.toLowerCase()] = false);
+
+
+// ciclo día-atardecer
+AFRAME.registerComponent('sun-cycle', {
+  tick: function(time){
+    const t = time * 0.00005;
+    const y = Math.sin(t) * 20 + 10;
+
+    this.el.setAttribute('position', {
+      x: Math.cos(t) * 20,
+      y: y,
+      z: Math.sin(t) * 20
+    });
+
+    const sky = document.querySelector("a-sky");
+
+    if(y < 5){
+      sky.setAttribute("color","#ff9966"); // atardecer
+    } else {
+      sky.setAttribute("color","#87CEEB"); // día
+    }
+  }
+});
+
+</script>
+
 </head>
 
 <body>
-<a-scene shadow="type: pcfsoft">
 
-  <a-sky src="image.png"></a-sky>
+<a-scene shadow="type:pcfsoft" fog="type: exponential; density:0.02; color:#cce0ff">
 
-  <!-- Luces -->
-  <a-light type="ambient" intensity="0.5"></a-light>
+<a-assets>
 
-  <a-light 
-    type="directional"
-    position="2 5 3"
-    intensity="1"
-    castShadow="true">
-  </a-light>
+<a-asset-item id="templo" src="AnfiteatroCaral.glb"></a-asset-item>
 
-  <!-- Cámara -->
-<a-camera position="0 1.6 6" wasd-controls-enabled="false"></a-camera>
+</a-assets>
 
-  <!-- Modelo -->
-  <a-entity 
-    gltf-model="AnfiteatroCaral.glb"
-    position="0 0.8 0"
-    scale="2 2 2"
-    shadow="cast: true"
-    animation="property: rotation; to: 0 360 0; loop: true; dur: 20000; easing: linear">
-  </a-entity>
+<!-- cielo -->
+
+<a-sky color="#87CEEB"></a-sky>
+
+<!-- luz ambiente -->
+
+<a-light type="ambient" intensity="0.35"></a-light>
+
+<!-- sol dinámico -->
+
+<a-light
+type="directional"
+sun-cycle
+intensity="1.4"
+castShadow="true"
+shadow-mapWidth="2048"
+shadow-mapHeight="2048"> </a-light>
+
+<!-- templo -->
+
+<a-entity
+gltf-model="#templo"
+position="0 0 2"
+scale=".2 .2 .2"
+shadow="cast:true; receive:true"> </a-entity>
+
+<!-- agua -->
+
+<a-plane
+position="0 0.1 0"
+rotation="-90 0 0"
+width="40"
+height="40"
+material="color:#4aa3df; metalness:0.6; roughness:0.1; opacity:0.85"
+
+> </a-plane>
+
+<!-- suelo -->
+
+<a-plane
+rotation="-90 0 0"
+width="500"
+height="500"
+color="#dddddd"
+shadow="receive:true"> </a-plane>
+
+<!-- vegetación simple -->
+
+<a-cylinder position="5 1 -5" radius="0.2" height="2" color="#8B5A2B"></a-cylinder> <a-sphere position="5 2.5 -5" radius="1.2" color="#2E8B57"></a-sphere>
+
+<a-cylinder position="-4 1 -8" radius="0.2" height="2" color="#8B5A2B"></a-cylinder> <a-sphere position="-4 2.5 -8" radius="1.3" color="#2E8B57"></a-sphere>
+
+<!-- jugador -->
+
+<a-entity
+camera
+look-controls
+wasd-controls="acceleration:80"
+fly-controls
+joystick-controls
+position="0 1.6 5"> </a-entity>
 
 </a-scene>
+
 </body>
 </html>
